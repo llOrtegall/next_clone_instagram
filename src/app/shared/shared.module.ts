@@ -23,6 +23,7 @@ import { SectionGenericComponent } from './components/section-generic/section-ge
     SidebarComponent,
     MediaPlayerComponent,
     HeaderUserComponent,
+    SectionGenericComponent
   ]
 })
 export class SharedModule { }
