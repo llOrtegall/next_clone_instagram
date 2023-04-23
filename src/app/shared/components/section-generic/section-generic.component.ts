@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { TrackModel } from '@core/model/track.model';
 
 @Component({
   selector: 'app-section-generic',
@@ -9,7 +10,7 @@ export class SectionGenericComponent {
 
   @Input() title: string = ''
   @Input() mode: 'small' | 'big' = 'big'
-  @Input() dataTracks: Array<any> = []
+  @Input() dataTracks: Array<TrackModel> = []
 
   constructor(){
     
