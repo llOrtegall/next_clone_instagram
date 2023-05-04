@@ -32,7 +32,12 @@ export class SidebarComponent implements OnInit {
         name: 'Tu biblioteca',
         icon: 'uil uil-chart',
         router: ['/', 'favorites'],
-      }
+      },
+      {
+        name: 'Lo mas escuchado',
+        icon: 'uil uil-user',
+        router: ['/', 'profile'],
+      },
     ];
 
     this.mainMenu.accessLink = [
@@ -61,6 +66,10 @@ export class SidebarComponent implements OnInit {
       },
       {
         name: 'Mi lista º4',
+        router: ['/'],
+      },
+      {
+        name: 'Mi lista º5',
         router: ['/'],
       },
     ];
