@@ -37,7 +37,7 @@ export class SidebarComponent implements OnInit {
         name: 'Lo mas escuchado',
         icon: 'uil uil-user',
         router: ['/', 'profile'],
-      },
+      }
     ];
 
     this.mainMenu.accessLink = [
