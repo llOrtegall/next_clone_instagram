@@ -21,7 +21,7 @@ export class SidebarComponent implements OnInit {
       {
         name: 'Home',
         icon: 'uil uil-estate',
-        router: ['/', 'auth'],
+        router: ['/'], //TODO: https://localhost:4200
       },
       {
         name: 'Buscar',
@@ -36,7 +36,7 @@ export class SidebarComponent implements OnInit {
       {
         name: 'Lo mas escuchado',
         icon: 'uil uil-user',
-        router: ['/', 'profile'],
+        router: ['/', 'tracks'],
       }
     ];
 
