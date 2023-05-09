@@ -3,7 +3,7 @@
     <h3>Para continuar, inicia sesión en Spotify.</h3>
 
 
-    <form class="login-auth-form">
+    <form (ngSubmit)="sendLogin()" [formGroup]="formLogin" class="login-auth-form">
       <div class="form-group">
         <label for="email">Dirección de correo o nombre de usuario</label>
         <input formControlName="email" type="text" class="form-input"
@@ -20,8 +20,14 @@
       </div>
       <div *ngIf="">Ocurrio un error con tu email o password</div>
       <div class="form-action">
-        <button [disabled]="" class="login social-btn">Iniciar sesión</button>
+        <button [disabled]="formLogin.invalid" class="login social-btn">Iniciar sesión</button>
       </div>
     </form>
+
+    <div>
+      <hr>
+      Raw: {{formLogin.value | json}}
+    </div>
+
   </div>
 </div>
