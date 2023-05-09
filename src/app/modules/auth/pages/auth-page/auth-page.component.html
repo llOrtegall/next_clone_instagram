@@ -1,3 +1,27 @@
-<p>auth-page works!
-    Here go tu contructor for authentication
-</p>
+<div class="login-auth-page">
+  <div class="login-auth-wrapper">
+    <h3>Para continuar, inicia sesión en Spotify.</h3>
+
+
+    <form class="login-auth-form">
+      <div class="form-group">
+        <label for="email">Dirección de correo o nombre de usuario</label>
+        <input formControlName="email" type="text" class="form-input"
+          placeholder="Dirección de correo o nombre de usuario" />
+      </div>
+
+      <div class="form-group">
+        <label for="password">Contraseña</label>
+        <input formControlName="password" type="password"  placeholder="Contraseña" 
+        class="form-input"/>
+      </div>
+      <div class="form-steps">
+        <a class="link" href="">¿Se te ha olvidado la contraseña?</a>
+      </div>
+      <div *ngIf="">Ocurrio un error con tu email o password</div>
+      <div class="form-action">
+        <button [disabled]="" class="login social-btn">Iniciar sesión</button>
+      </div>
+    </form>
+  </div>
+</div>
