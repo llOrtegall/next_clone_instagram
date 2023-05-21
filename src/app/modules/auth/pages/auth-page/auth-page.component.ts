@@ -9,7 +9,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 export class AuthPageComponent implements OnInit {
   formLogin: FormGroup = new FormGroup({});
 
-  constructor() {}
+  constructor() { }
 
   ngOnInit(): void {
     this.formLogin = new FormGroup({
@@ -25,7 +25,9 @@ export class AuthPageComponent implements OnInit {
     });
   }
 
-  sendLogin():void {
+
+  //*Enviar login captura la inf del form
+  sendLogin(): void {
     const body = this.formLogin.value;
     console.log(body);
   }
