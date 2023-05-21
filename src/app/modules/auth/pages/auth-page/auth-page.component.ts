@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-
 @Component({
   selector: 'app-auth-page',
   templateUrl: './auth-page.component.html',
@@ -8,9 +7,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 })
 export class AuthPageComponent implements OnInit {
   formLogin: FormGroup = new FormGroup({});
-
   constructor() { }
-
   ngOnInit(): void {
     this.formLogin = new FormGroup({
       email: new FormControl('', [
@@ -24,8 +21,6 @@ export class AuthPageComponent implements OnInit {
       ]),
     });
   }
-
-
   //*Enviar login captura la inf del form
   sendLogin(): void {
     const body = this.formLogin.value;
