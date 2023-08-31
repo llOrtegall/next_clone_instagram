@@ -1,1 +1,0 @@
-debo continuar realizando contribuciones diarias a este proyecto
