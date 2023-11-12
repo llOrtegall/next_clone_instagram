@@ -1,6 +1,6 @@
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom'
 import { Dashboard } from './Pages/Dashboard'
-import { Items } from './Pages/Items'
+import { Items } from './Components/Items'
 import { LoginForm } from './Pages/LoginForm'
 import { Layout } from './Components/Layout'
 import { useAuth } from './Auth/AuthContext'
@@ -48,7 +48,13 @@ export function App () {
       <Route path='/login' element={<LoginForm />} />
       <Route path='/' element={<ProtectedRoute><Layout /></ProtectedRoute>}>
         <Route index element={<Dashboard />} />
-        <Route path='Items' element={<Items /> } />
+        <Route path='Items' element={<Items /> } >
+          <Route path='getItems' element={<h1>Ver Items</h1>} />
+          <Route path='createItem' element={<h1>Crear Activo</h1>} />
+          <Route path='getItems' element={<h1>get Activo</h1>} />
+          <Route path='updateItem' element={<h1>update Activo</h1>} />
+          <Route path='crearMovimien' element={<h1>Crear Movimiento</h1>} />
+        </Route>
       </Route>
     </Routes>
   )

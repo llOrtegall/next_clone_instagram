@@ -35,14 +35,14 @@ export function LoginForm () {
         <div className="flex relative pt-12">
           <label className='text-xl font-semibold absolute bottom-10'>Usuario</label>
           <input type="text" required
-            className='p-2  rounded-xl border'
+            className='p-2 rounded-xl border outline-none'
             value={user} onChange={ev => setUser(ev.target.value)} />
           <figure className='w-6 flex items-center justify-center ml-2'><User /></figure>
         </div>
         <div className="flex relative pt-12">
           <label className='text-xl font-semibold absolute bottom-10'>Contraseña</label>
           <input type="password" required
-            className='p-2  rounded-xl border'
+            className='p-2 rounded-xl border outline-none'
             value={password} onChange={ev => setPassword(ev.target.value)} />
           <figure className='w-6 flex items-center justify-center ml-2'><Lock /></figure>
         </div>
