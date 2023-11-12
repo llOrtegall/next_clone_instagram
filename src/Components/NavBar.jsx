@@ -4,8 +4,13 @@ export function NavBar () {
   return (
     <nav>
       <ul>
+        <figure>
+          <img width={80} src="/logo.png" alt="logo" />
+        </figure>
+      </ul>
+      <ul>
         <li>
-          <Link to='/'>Home</Link>
+          <Link to='/'>Inicio</Link>
         </li>
         <li>
           <Link to='items'>Items</Link>

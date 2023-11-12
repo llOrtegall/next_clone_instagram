@@ -3,11 +3,11 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../Auth/AuthContext'
 import { useState } from 'react'
 import axios from 'axios'
-import './Login.css'
 
 export function LoginForm () {
   const [user, setUser] = useState('')
   const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
   const navigate = useNavigate()
 
   const { login } = useAuth()
@@ -20,26 +20,35 @@ export function LoginForm () {
         document.cookie = `stock=${res.data.token}`
         navigate('/')
       })
+      .catch(err => {
+        setError(err.response.data.error)
+        setTimeout(() => {
+          setError('')
+        }, 3500)
+      })
   }
 
   return (
-    <section>
-      <form className='form-box' onSubmit={handleSubmit}>
-        <h2>Bienvenido</h2>
-        <div className="inputbox">
-          <figure className='icons'><User /></figure>
+    <section className='flex flex-col bg-login w-full h-full justify-center items-center'>
+      <form className='w-450 h-auto py-8 flex flex-col items-center border rounded-lg backdrop-blur-md' onSubmit={handleSubmit}>
+        <h2 className='text-2xl font-semibold'>Bienvenido</h2>
+        <div className="flex relative pt-12">
+          <label className='text-xl font-semibold absolute bottom-10'>Usuario</label>
           <input type="text" required
+            className='p-2  rounded-xl border'
             value={user} onChange={ev => setUser(ev.target.value)} />
-          <label >Usuario</label>
+          <figure className='w-6 flex items-center justify-center ml-2'><User /></figure>
         </div>
-        <div className="inputbox">
-          <figure className='icons'><Lock /></figure>
+        <div className="flex relative pt-12">
+          <label className='text-xl font-semibold absolute bottom-10'>Contraseña</label>
           <input type="password" required
+            className='p-2  rounded-xl border'
             value={password} onChange={ev => setPassword(ev.target.value)} />
-          <label >Contraseña</label>
+          <figure className='w-6 flex items-center justify-center ml-2'><Lock /></figure>
         </div>
-        <button>Iniciar Sesion</button>
+        <button className='p-2 mt-10 bg-green-400 rounded-md text-white font-bold'>Iniciar Sesion</button>
       </form>
+      {error && <p className='text-red-500 mt-4 font-semibold absolute bottom-60'>{error}</p>}
     </section>
   )
 }
