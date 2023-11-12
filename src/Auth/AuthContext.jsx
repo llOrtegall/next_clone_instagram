@@ -10,20 +10,31 @@ export const useAuth = () => {
 
 // eslint-disable-next-line react/prop-types
 export const AuthContextProvider = ({ children }) => {
+  const [user, setUser] = useState({})
   const [isAuthenticated, setIsAuthenticated] = useState(null)
 
-  const login = () => {
-    setIsAuthenticated(true)
+  const getUser = (dataUser) => {
+    setUser(dataUser)
+  }
+
+  const login = (boolen) => {
+    if (boolen === true) {
+      setIsAuthenticated(boolen)
+    } else {
+      setIsAuthenticated(boolen)
+    }
   }
 
   const logout = () => {
     setIsAuthenticated(null)
+    setUser({})
   }
 
   console.log(isAuthenticated)
+  console.log(user)
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, user, login, logout, getUser }}>
       {children}
     </AuthContext.Provider>
   )
