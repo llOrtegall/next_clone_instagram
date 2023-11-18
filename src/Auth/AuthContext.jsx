@@ -30,9 +30,6 @@ export const AuthContextProvider = ({ children }) => {
     setUser({})
   }
 
-  console.log(isAuthenticated)
-  console.log(user)
-
   return (
     <AuthContext.Provider value={{ isAuthenticated, user, login, logout, getUser }}>
       {children}

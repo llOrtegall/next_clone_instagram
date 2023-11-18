@@ -8,7 +8,7 @@ export function NavBar () {
           <Link to='/'>Home</Link>
         </li>
         <li>
-          <Link to='dashboard'>dashboard</Link>
+          <Link to='items'>Items</Link>
         </li>
       </ul>
     </nav>

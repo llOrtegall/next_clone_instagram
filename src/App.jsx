@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom'
 import { Dashboard } from './Pages/Dashboard'
+import { Items } from './Pages/Items'
 import { LoginForm } from './Pages/LoginForm'
 import { Layout } from './Components/Layout'
 import { useAuth } from './Auth/AuthContext'
@@ -31,7 +32,7 @@ export function App () {
           .then(res => {
             login(res.data.auth)
             getUser(res.data.user)
-            navigate('/dashboard')
+            navigate('/')
           })
       } else {
         navigate('/login')
@@ -46,7 +47,8 @@ export function App () {
     <Routes>
       <Route path='/login' element={<LoginForm />} />
       <Route path='/' element={<ProtectedRoute><Layout /></ProtectedRoute>}>
-        <Route index path='dashboard' element={<Dashboard />} />
+        <Route index element={<Dashboard />} />
+        <Route path='Items' element={<Items /> } />
       </Route>
     </Routes>
   )
