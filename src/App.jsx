@@ -1,6 +1,7 @@
 import { RegistrarUser } from './pages/RegisterUser'
 
-function App () {
+function App() {
+
   return (
     <main className='w-screen h-screen'>
       <RegistrarUser />
