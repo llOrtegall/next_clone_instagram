@@ -1,7 +1,10 @@
+import { Route, Routes } from 'react-router-dom'
+import { Login } from './Pages/Login.JSX'
+
 export function App () {
   return (
-    <h1>
-      Hello World
-    </h1>
+    <Routes>
+      <Route path='/login' element={<Login />} />
+    </Routes>
   )
 }
