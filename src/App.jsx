@@ -1,8 +1,13 @@
+import { Route, Routes } from 'react-router-dom'
+
+import { Home } from './pages/Home'
+import { Resumen } from './pages/Resumen'
+
 export function App () {
   return (
-    <div className="bg-red-200">
-      <h1>React 18</h1>
-      <p>React 18 is the latest version of React</p>
-    </div>
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path='/resumen' element={<Resumen />} />
+    </Routes>
   )
 }
