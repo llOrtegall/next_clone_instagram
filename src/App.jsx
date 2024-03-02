@@ -2,6 +2,7 @@ import { Route, Routes } from 'react-router-dom'
 
 import { Home } from './pages/Home'
 import { Resumen } from './pages/Resumen'
+import { Build } from './components/Icons'
 
 export function App () {
   return (
@@ -9,8 +10,8 @@ export function App () {
 
       <nav className='bg-blue-300 w-[20vw] h-[100vh]'>
 
-        <figure>
-          <i className="ri-building-line"></i>
+        <figure className='w-20'>
+          <Build />
         </figure>
 
         <ul className='flex items-center flex-col'>
