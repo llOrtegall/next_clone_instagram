@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer utilities{
+@layer utilities {
   .text-balance {
     text-wrap: balance;
   }
@@ -11,8 +11,4 @@
 :root {
   --red: rgb(207, 33, 66);
   --orange: rgb(230, 173, 77);
-}
-
-body{
-  
 }
