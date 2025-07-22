@@ -1,14 +1,36 @@
 import { Button, TextArea, TextField, } from "@radix-ui/themes";
 import { UploadIcon } from "lucide-react";
+import { auth } from "@/auth";
+import { prisma } from "@/db";
 
-export default function SettingsPage() {
+export default async function SettingsPage() {
+  const session = await auth();
+
   return (
     <div className="max-w-md mx-auto">
 
       <h1 className="text-2xl font-bold mb-4 text-center">Profile Settings</h1>
 
-      <form action={async () => {
+      <form action={async (data: FormData) => {
         'use server';
+
+        await prisma.profile.upsert({
+          where: {
+            email: session?.user?.email || '',
+          },
+          update: {
+            username: data.get("username") as string,
+            name: data.get('names') as string,
+            subtitle: data.get('subtitle') as string
+          },
+          create: {
+            email: session?.user?.email || '',
+            username: data.get('username') as string,
+            name: data.get('names') as string,
+            subtitle: data.get('subtitle') as string,
+            bio: data.get('bio') as string
+          }
+        })
 
       }}>
 
@@ -31,13 +53,22 @@ export default function SettingsPage() {
         />
 
         <p className="mt-2 font-bold">name:</p>
-        <TextField.Root placeholder="John Dow" />
+        <TextField.Root
+          name="names"
+          placeholder="John Dow"
+        />
 
         <p className="mt-2 font-bold">subtitle:</p>
-        <TextField.Root placeholder="Full Stack Developer" />
+        <TextField.Root
+          name="subtitle"
+          placeholder="Full Stack Developer"
+        />
 
         <p className="mt-2 font-bold">bio:</p>
-        <TextArea placeholder="I'm a ..." />
+        <TextArea
+          name="bio"
+          placeholder="I'm a ..."
+        />
 
         <div className="mt-4 flex justify-center">
           <Button variant="solid">Save settings</Button>
