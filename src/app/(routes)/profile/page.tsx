@@ -1,5 +1,7 @@
+import PostsGrid from "@/app/components/PostsGrid";
 import { CheckIcon, ChevronLeft, CogIcon } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function ProfilePage() {
   return (
@@ -34,6 +36,26 @@ export default function ProfilePage() {
             </figure>
           </div>
         </div>
+      </section>
+
+      <section className="text-center mt-2">
+        <h1 className="text-xl font-bold">Jonhy</h1>
+        <p className="text-gray-500 mb-1">Bussines account</p>
+        <p>
+          Enterpreneour husban Father <br />
+          contact: jhony@gmail.com
+        </p>
+      </section>
+
+      <section className="mt-4">
+        <div className="flex justify-center gap-2 font-bold">
+          <Link href={'/'}>Posts</Link>
+          <Link className="text-gray-400" href={'/highlights'}>Highlights</Link>
+        </div>
+      </section>
+
+      <section className="mt-2">
+        <PostsGrid />
       </section>
     </main >
   )
