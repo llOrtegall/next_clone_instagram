@@ -43,9 +43,10 @@ export default async function ProfilePage() {
         </div>
       </section>
 
-      <section className="text-center mt-2">
+      <section className="flex flex-col items-center text-center mt-2">
         <h1 className="text-xl font-bold">{profile.name}</h1>
         <p className="text-gray-500 mb-1">{profile.subtitle}</p>
+        <p className="w-56 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm text-gray-900 bg-ig-orange">{profile.bio}</p>
         <p> contact: {profile.email} </p>
       </section>
 
