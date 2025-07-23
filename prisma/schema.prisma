@@ -1,19 +1,20 @@
 generator client {
   provider = "prisma-client-js"
-  output   = "./generated/prisma"
 }
 
 datasource db {
-  provider = "mongodb"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model Profile {
-  id    String  @id @default(auto()) @map("_id") @db.ObjectId
-  email String
-  avatar String
-  username String
-  name String
-  subtitle String
-  bio String
+  id        String   @id @default(uuid())
+  email     String?  @unique @db.VarChar(255)
+  avatar    String?  @db.VarChar(2048)        
+  username  String   @unique @db.VarChar(30) 
+  name      String?  @db.VarChar(100)
+  subtitle  String?  @db.VarChar(150)
+  bio       String?  @db.Text               
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
