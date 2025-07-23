@@ -4,9 +4,11 @@ import { Button, TextArea, TextField, } from "@radix-ui/themes";
 import { updateProfile } from "@/services/actions";
 import { UploadIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { Profile } from "@prisma/client";
 
-export default function SettingsForms({ userEmail }: { userEmail: string }) {
+export default function SettingsForms({ userEmail, profile }: { userEmail: string, profile: Profile }) {
   const router = useRouter();
+
   return (
     <form action={async (data: FormData) => {
       await updateProfile(data, userEmail);
@@ -29,24 +31,28 @@ export default function SettingsForms({ userEmail }: { userEmail: string }) {
       <p className="mt-2 font-bold">username:</p>
       <TextField.Root
         name="username"
+        defaultValue={profile.username}
         placeholder="your_username"
       />
 
       <p className="mt-2 font-bold">name:</p>
       <TextField.Root
         name="names"
+        defaultValue={profile.name || ''}
         placeholder="John Dow"
       />
 
       <p className="mt-2 font-bold">subtitle:</p>
       <TextField.Root
         name="subtitle"
+        defaultValue={profile.subtitle || ''}
         placeholder="Full Stack Developer"
       />
 
       <p className="mt-2 font-bold">bio:</p>
       <TextArea
         name="bio"
+        defaultValue={profile.bio || ''}
         placeholder="I'm a ..."
       />
 
