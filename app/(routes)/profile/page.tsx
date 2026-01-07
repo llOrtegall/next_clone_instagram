@@ -1,9 +1,19 @@
 import PostGrid from "@/app/components/PostGrid";
+import { auth } from "@/auth";
+import { prisma } from "@/lib/prisma";
 import { CheckIcon, ChevronLeft, CogIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function ProfilePage() {
+export default async function ProfilePage() {
+  const session = await auth();
+
+  const user = await prisma.profile.findFirstOrThrow({
+    where: {
+      email: session?.user?.email || ''
+    }
+  })
+
   return (
     <>
       <section className="flex justify-between items-center">
@@ -11,8 +21,8 @@ export default function ProfilePage() {
           <ChevronLeft />
         </button>
         <article className="font-bold flex items-center gap-2">
-          my_name_is_jony
-          <div className="size-5 rounded-full bg-red inline-flex justify-center items-center">
+          {user.username}
+          <div className="size-4 rounded-full bg-red-800 text-white inline-flex justify-center items-center">
             <CheckIcon size={16} />
           </div>
         </article>
@@ -25,7 +35,7 @@ export default function ProfilePage() {
         <div className="size-48 p-2 rounded-full bg-linear-to-tr from-orange to-red">
           <div className="size-44 p-2 bg-white rounded-full">
             <figure className="size-40 aspect-square overflow-hidden rounded-full">
-              <Image src="https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=1961&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+              <Image src={session?.user?.image || '/avatar.jpg'}
                 alt="Profile Picture"
                 className="w-full h-full object-cover"
                 width={160}
@@ -37,12 +47,16 @@ export default function ProfilePage() {
       </section >
 
       <section className="text-center mt-4">
-        <h1 className="text-xl font-bold">Jony</h1>
-        <p className="text-gray-400 mt-1">Business account</p>
+        <h1 className="text-xl font-bold">
+          {user.name || session?.user?.name}
+        </h1>
+        <p className="text-gray-600 mt-1">
+          {user.subtitle}
+        </p>
         <p>
-          Enterpreneur, Husband & Father
+          {user.bio}
           <br />
-          contact: jony@gmail.com
+          contact: {user.email || session?.user?.email}
         </p>
       </section>
 
