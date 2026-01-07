@@ -1,36 +1,22 @@
-import { Button, TextArea, TextField } from "@radix-ui/themes";
-import { UploadIcon } from "lucide-react";
+import SettingsForm from "@/app/components/SettingsForm";
+import { auth } from "@/auth";
+import { prisma } from "@/lib/prisma";
 
-export default function SettingsPage() {
+export default async function SettingsPage() {
+  const session = await auth();
+
+  if (!session?.user?.email) {
+    return <p className="text-center p-4">You must be logged in to access settings.</p>
+  }
+
+  const profile = await prisma.profile.findFirstOrThrow({
+    where: { email: session.user.email }
+  });
+
   return (
     <section className="max-w-lg mx-auto p-4">
       <h1 className="text-2xl font-semibold text-center pb-4">Profile Settings</h1>
-      <form action={""}>
-        <figure className="flex gap-4 items-center">
-
-          <div className="size-24 bg-gray-300 rounded-full">
-          </div>
-
-          <div>
-            <Button variant="surface">
-              <UploadIcon className="size-4 mr-2" />
-              Change Avatar
-            </Button>
-          </div>
-
-        </figure>
-        <p className="py-1 font-semibold"> username: </p>
-        <TextField.Root placeholder="your_username" />
-        <p className="py-1 font-semibold"> name: </p>
-        <TextField.Root placeholder="John Doe" />
-        <p className="py-1 font-semibold"> subtitle: </p>
-        <TextField.Root placeholder="Web developer and designer" />
-        <p className="py-1 font-semibold"> bio: </p>
-        <TextArea placeholder="This is my bio" />
-        <div className="py-2 flex justify-end">
-          <Button className="mt-4" variant="solid"> Save changes </Button>
-        </div>
-      </form>
+      <SettingsForm userEmail={session?.user?.email || ''} profile={profile} />
     </section>
   )
 }
