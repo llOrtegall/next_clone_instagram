@@ -66,7 +66,7 @@ export async function POST(request: NextRequest) {
     const extension = file.name.split('.').pop()?.toLowerCase() || 'jpg';
     const uuid = randomUUID();
     const userHash = Buffer.from(session.user.email).toString('base64').substring(0, 8);
-    const fileName = `avatars/${userHash}/${uuid}.${extension}`;
+    const fileName = `${userHash}/${uuid}.${extension}`;
 
     // 6. SUBIR A R2
     const result = await uploadToS3(fileName, buffer, file.type);
