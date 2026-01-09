@@ -1,36 +1,45 @@
 import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
+import { auth } from "@/auth";
 
-export function proxy(request: NextRequest) {
-  // Agregar headers de seguridad
+export default auth((req) => {
+  const { pathname } = req.nextUrl;
+  const isLoggedIn = !!req.auth;
+
+  const publicRoutes = ['/'];
+  const isPublicRoute = publicRoutes.includes(pathname);
+
+  if (!isLoggedIn && !isPublicRoute) {
+    return NextResponse.redirect(new URL('/', req.url));
+  }
+
+  if (isLoggedIn && pathname === '/') {
+    return NextResponse.redirect(new URL('/home', req.url));
+  }
+
   const response = NextResponse.next();
   
-  // Prevenir clickjacking
   response.headers.set('X-Frame-Options', 'DENY');
   
-  // Prevenir MIME sniffing
   response.headers.set('X-Content-Type-Options', 'nosniff');
   
-  // XSS Protection (legacy pero útil)
   response.headers.set('X-XSS-Protection', '1; mode=block');
   
-  // Referrer Policy
   response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
   
-  // Permissions Policy
   response.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
 
   return response;
-}
+});
 
 export const config = {
   matcher: [
     /*
      * Match all request paths except for the ones starting with:
+     * - api/auth (rutas de autenticación de NextAuth)
      * - _next/static (static files)
      * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
+     * - favicon.ico, sitemap.xml, robots.txt (archivos públicos)
      */
-    '/((?!_next/static|_next/image|favicon.ico).*)',
+    '/((?!api/auth|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)',
   ],
 };
