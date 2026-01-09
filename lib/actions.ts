@@ -13,6 +13,7 @@ export async function updateProfileOrCreate(data: FormData, userEmail: string) {
     name: data.get("name") as string,
     subtitle: data.get("subtitle") as string,
     bio: data.get("bio") as string,
+    avatarUrl: data.get("avatarUrl") as string | null,
   }
 
   await prisma.profile.upsert({
