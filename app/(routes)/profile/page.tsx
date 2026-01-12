@@ -73,7 +73,7 @@ export default async function ProfilePage() {
         </nav>
       </section>
 
-      <PostGrid />
+      <PostGrid email={user.email} />
 
     </>
   )
