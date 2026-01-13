@@ -53,6 +53,11 @@ export async function newPostCreated(data: FormData, userEmail: string) {
   throw new Error('Error creating post');
 }
 
+/**
+ * Fetches a post by its ID.
+ * @param id The ID of the post to fetch
+ * @returns Promise that resolves to the post data or undefined if not found
+ */
 export async function getPostById(id: string) {
   if (!id) {
     throw new Error('id is required')
@@ -78,6 +83,11 @@ export async function getPostById(id: string) {
 
 }
 
+/**
+ * Fetches all posts associated with a given email.
+ * @param email The email of the user whose posts are to be fetched
+ * @returns Promise that resolves to an array of posts
+ */
 export async function getAllPostByEmail(email: string) {
   if (!email) {
     throw new Error('Email is required')
