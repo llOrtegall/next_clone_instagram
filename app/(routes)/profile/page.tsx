@@ -1,22 +1,27 @@
-import PostGrid from "@/app/components/PostGrid";
-import { auth } from "@/auth";
-import { prisma } from "@/lib/prisma";
 import { CheckIcon, ChevronLeft, CogIcon } from "lucide-react";
+import PostGrid from "@/app/components/PostGrid";
+import { prisma } from "@/lib/prisma";
 import Image from "next/image";
+import { auth } from "@/auth";
 import Link from "next/link";
-
 
 export default async function ProfilePage() {
   const session = await auth();
 
-  if(!session?.user?.email) {
+  if (!session?.user?.email) {
     // redirect to login page or show an error
     return <p className="text-center p-4">You must be logged in to view this page. <Link href="/">Login</Link></p>
   }
 
-  const user = await prisma.profile.findFirstOrThrow({
-    where: {
-      email: session?.user?.email || ''
+  const user = await prisma.user.findUnique({
+    where: { email: session.user.email },
+    select: {
+      username: true,
+      name: true,
+      subtitle: true,
+      bio: true,
+      email: true,
+      image: true,
     }
   })
 
@@ -27,7 +32,7 @@ export default async function ProfilePage() {
           <ChevronLeft />
         </button>
         <article className="font-bold flex items-center gap-2">
-          {user.username || session?.user?.name}
+          {user?.username || session?.user?.name}
           <div className="size-4 rounded-full bg-red-800 text-white inline-flex justify-center items-center">
             <CheckIcon size={16} />
           </div>
@@ -41,12 +46,19 @@ export default async function ProfilePage() {
         <div className="size-48 p-2 rounded-full bg-linear-to-tr from-orange to-red">
           <div className="size-44 p-2 bg-white rounded-full">
             <figure className="size-40 aspect-square overflow-hidden rounded-full">
-              <Image src={user.avatarUrl || session?.user?.image || '/default-avatar.png'}
-                alt="Profile Picture"
-                className="w-full h-full object-cover"
-                width={160}
-                height={160}
-              />
+              {
+                user?.image ? (
+                  <Image src={user.image}
+                    alt="Profile Picture"
+                    className="w-full h-full object-cover"
+                    width={160}
+                    height={160}
+                  />) : (
+                  <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-500">
+                    No Image
+                  </div>
+                )
+              }
             </figure>
           </div>
         </div>
@@ -54,15 +66,15 @@ export default async function ProfilePage() {
 
       <section className="text-center mt-4">
         <h1 className="text-xl font-bold">
-          {user.name || session?.user?.name}
+          {user?.name || 'Unnamed User'}
         </h1>
         <p className="text-gray-600 mt-1">
-          {user.subtitle}
+          {user?.subtitle || 'No subtitle provided'}
         </p>
         <p>
-          {user.bio}
+          {user?.bio || 'This user has not added a bio yet.'}
           <br />
-          contact: {user.email || session?.user?.email}
+          contact: {user?.email || 'No email available'}
         </p>
       </section>
 
@@ -73,7 +85,7 @@ export default async function ProfilePage() {
         </nav>
       </section>
 
-      <PostGrid email={user.email} />
+      <PostGrid email={session.user.email} />
 
     </>
   )
