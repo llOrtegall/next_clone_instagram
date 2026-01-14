@@ -9,22 +9,18 @@ import { prisma } from "./prisma";
  * @param userEmail The email of the user whose profile is to be updated or created
  * @return Promise<void>
  */
-export async function updateProfileOrCreate(data: FormData, userEmail: string) {
+export async function updateProfile(data: FormData, userEmail: string) {
   const newUserInfo = {
     username: data.get("username") as string,
     name: data.get("name") as string,
     subtitle: data.get("subtitle") as string,
     bio: data.get("bio") as string,
-    avatarUrl: data.get("avatarUrl") as string | null,
+    image: data.get("image") as string | null,
   }
 
-  await prisma.profile.upsert({
+  await prisma.user.update({
     where: { email: userEmail },
-    update: newUserInfo,
-    create: {
-      email: userEmail,
-      ...newUserInfo,
-    }
+    data: newUserInfo
   })
 }
 
