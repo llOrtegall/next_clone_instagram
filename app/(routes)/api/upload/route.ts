@@ -65,8 +65,7 @@ export async function POST(request: NextRequest) {
     // 5. GENERAR NOMBRE ÚNICO Y SEGURO (UUID + user email hash)
     const extension = file.name.split('.').pop()?.toLowerCase() || 'jpg';
     const uuid = randomUUID();
-    const userHash = Buffer.from(session.user.email).toString('base64').substring(0, 8);
-    const fileName = `${userHash}/${uuid}.${extension}`;
+    const fileName = `${uuid}.${extension}`;
 
     // 6. SUBIR A R2
     const result = await uploadToS3(fileName, buffer, file.type);
