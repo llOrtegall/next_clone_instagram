@@ -1,6 +1,8 @@
-import { auth, signIn } from "@/auth";
-import { redirect } from "next/navigation";
 import { Flex, Card, Heading, Text, Button, Separator } from "@radix-ui/themes";
+import LoginCredentials from "./components/LoginCredentials";
+import { redirect } from "next/navigation";
+import { auth, signIn } from "@/auth";
+import Link from "next/link";
 
 export default async function Home() {
   const session = await auth();
@@ -10,27 +12,22 @@ export default async function Home() {
   }
 
   return (
-    <Flex 
-      align="center" 
-      justify="center" 
+    <Flex
+      align="center"
+      justify="center"
       className="min-h-screen bg-gray-50"
       p="4"
     >
-      <Card size="4" style={{ maxWidth: 420, width: '100%' }}>
+      <Card size="4" style={{ maxWidth: 460, width: '100%' }}>
         <Flex direction="column" gap="5">
-          {/* Logo y título */}
+
           <Flex direction="column" align="center" gap="2">
             <Heading size="8" weight="bold">
-              Instagram
+              Instagram Clone
             </Heading>
-            <Text size="2" color="gray">
-              Comparte tus momentos
-            </Text>
           </Flex>
 
-          {/* Botones de inicio de sesión */}
           <Flex direction="column" gap="3">
-            {/* Botón de Google */}
             <form action={async () => {
               'use server';
               await signIn('google', { redirectTo: '/home' });
@@ -64,7 +61,6 @@ export default async function Home() {
               </Button>
             </form>
 
-            {/* Botón de GitHub */}
             <form action={async () => {
               'use server';
               await signIn('github', { redirectTo: '/home' });
@@ -88,14 +84,24 @@ export default async function Home() {
                 Continuar con GitHub
               </Button>
             </form>
+            
+            <Separator size="4" className="my-4" />
+
+            <LoginCredentials />
+
+            <Text size="1" align="center" color="gray">
+              No tienes una cuenta? Crea una:
+              <Link href="/register" style={{ color: 'blue', marginLeft: 4 }}>Regístrate</Link>
+            </Text>
+
           </Flex>
 
           <Separator size="4" />
 
-          {/* Información adicional */}
           <Text size="1" align="center" color="gray">
-            Al continuar, aceptas nuestros Términos y Política de privacidad
+            Este proyecto solo es para demostrar habilidades de desarrollo. No uses cuentas reales para iniciar sesión. o crea una cuenta fake.
           </Text>
+
         </Flex>
       </Card>
     </Flex>
