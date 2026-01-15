@@ -15,7 +15,7 @@ export default async function Home() {
     <Flex
       align="center"
       justify="center"
-      className="min-h-screen bg-gray-50"
+      className="min-h-screen "
       p="4"
     >
       <Card size="4" style={{ maxWidth: 460, width: '100%' }}>
@@ -91,7 +91,7 @@ export default async function Home() {
 
             <Text size="1" align="center" color="gray">
               No tienes una cuenta? Crea una:
-              <Link href="/register" style={{ color: 'blue', marginLeft: 4 }}>Regístrate</Link>
+              <Link href="/register" className="px-2 text-blue-400 hover:text-gray-300">Regístrate</Link>
             </Text>
 
           </Flex>
