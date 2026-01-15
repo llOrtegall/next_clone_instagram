@@ -1,24 +1,29 @@
 'use client';
 
 import { Button, TextArea, TextField } from "@radix-ui/themes";
-import { updateProfileOrCreate } from "@/lib/actions";
-import { UploadIcon } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { Profile } from "@/generated/prisma/client";
 import { useEffect, useRef, useState } from "react";
+import { updateProfile } from "@/lib/actions";
+import { useRouter } from "next/navigation";
+import { UploadIcon } from "lucide-react";
 import Image from "next/image";
 
-export default function SettingsForm(
-  { userEmail, profile }:
-    { userEmail: string, profile: Profile }
-) {
+interface SettingsFormProps {
+  username: string | null;
+  name: string | null;
+  email: string;
+  image: string | null;
+  subtitle: string | null;
+  bio: string | null;
+}
+
+export default function SettingsForm({ dataUser }: { dataUser: SettingsFormProps | null }) {
   const router = useRouter();
 
   const inputRefImg = useRef<HTMLInputElement>(null);
 
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
-  const [avatarUrl, setAvatarUrl] = useState<string | null>(profile.avatarUrl || null);
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(dataUser?.image || null);
 
   const handleChangeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -28,15 +33,13 @@ export default function SettingsForm(
 
   useEffect(() => {
     if (file) {
-      console.log('Selected file:', file);
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setUploading(true);
-      const data = new FormData();
-      data.set('file', file);
 
       fetch('/api/upload', {
         method: 'POST',
-        body: data,
+        body: file,
+        headers: { 'Content-Type': file.type }
       })
         .then(res => res.json())
         .then(data => {
@@ -61,9 +64,9 @@ export default function SettingsForm(
   return (
     <form action={async (data: FormData) => {
       if (avatarUrl) {
-        data.set('avatarUrl', avatarUrl);
+        data.set('image', avatarUrl);
       }
-      await updateProfileOrCreate(data, userEmail)
+      await updateProfile(data, dataUser?.email || '')
       router.push('/profile');
     }}>
       <figure className="flex gap-4 items-center">
@@ -101,13 +104,13 @@ export default function SettingsForm(
 
       </figure>
       <p className="py-1 font-semibold"> username: </p>
-      <TextField.Root name="username" placeholder="your_username" defaultValue={profile.username || ''} />
+      <TextField.Root name="username" placeholder="your_username" defaultValue={dataUser?.username || ''} />
       <p className="py-1 font-semibold"> name: </p>
-      <TextField.Root name="name" placeholder="John Doe" defaultValue={profile.name || ''} />
+      <TextField.Root name="name" placeholder="John Doe" defaultValue={dataUser?.name || ''} />
       <p className="py-1 font-semibold"> subtitle: </p>
-      <TextField.Root name="subtitle" placeholder="Web developer and designer" defaultValue={profile.subtitle || ''} />
+      <TextField.Root name="subtitle" placeholder="Web developer and designer" defaultValue={dataUser?.subtitle || ''} />
       <p className="py-1 font-semibold"> bio: </p>
-      <TextArea name="bio" placeholder="This is my bio" defaultValue={profile.bio || ''} />
+      <TextArea name="bio" placeholder="This is my bio" defaultValue={dataUser?.bio || ''} />
       <div className="py-2 flex justify-end">
         <Button className="mt-4" variant="solid"> Save changes </Button>
       </div>

@@ -1,3 +1,5 @@
+"use server";
+
 import {
   PutObjectCommand,
   S3Client,

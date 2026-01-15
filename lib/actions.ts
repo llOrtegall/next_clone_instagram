@@ -9,22 +9,18 @@ import { prisma } from "./prisma";
  * @param userEmail The email of the user whose profile is to be updated or created
  * @return Promise<void>
  */
-export async function updateProfileOrCreate(data: FormData, userEmail: string) {
+export async function updateProfile(data: FormData, userEmail: string) {
   const newUserInfo = {
     username: data.get("username") as string,
     name: data.get("name") as string,
     subtitle: data.get("subtitle") as string,
     bio: data.get("bio") as string,
-    avatarUrl: data.get("avatarUrl") as string | null,
+    image: data.get("image") as string | null,
   }
 
-  await prisma.profile.upsert({
+  await prisma.user.update({
     where: { email: userEmail },
-    update: newUserInfo,
-    create: {
-      email: userEmail,
-      ...newUserInfo,
-    }
+    data: newUserInfo
   })
 }
 
@@ -34,16 +30,15 @@ export async function updateProfileOrCreate(data: FormData, userEmail: string) {
  * @param userEmail The email of the user creating the post
  * @returns Promise that resolves to a redirect to the new post's page
  */
-export async function newPostCreated(data: FormData, userEmail: string) {
-  const newPostInfo = {
-    authorEmail: userEmail,
-    imageUrl: data.get("imageUrl") as string,
-    description: data.get("description") as string,
-    location: data.get("location") as string,
-  }
+export async function newPostCreated(userEmail: string, imageUrl: string, description: string, location: string) {
 
   const post = await prisma.post.create({
-    data: newPostInfo
+    data: {
+      authorEmail: userEmail,
+      imageUrl,
+      description,
+      location,
+    }
   })
 
   if (post.id) {
@@ -70,7 +65,9 @@ export async function getPostById(id: string) {
       id: post?.id,
       imageUrl: post?.imageUrl,
       description: post?.description,
-      location: post?.location
+      location: post?.location,
+      email: post?.authorEmail,
+      likes: post?.likes
     }
 
     return map
@@ -100,6 +97,7 @@ export async function getAllPostByEmail(email: string) {
       return {
         id: p?.id,
         imageUrl: p?.imageUrl,
+        likes: p.likes
       }
     })
 

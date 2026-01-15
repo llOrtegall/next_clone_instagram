@@ -2,7 +2,7 @@
 
 import { prisma } from "./prisma";
 
-const MAX_UPLOADS_PER_DAY = 3;
+const MAX_UPLOADS_PER_DAY = 10;
 const RATE_LIMIT_WINDOW = 86400000; // 24 horas en milisegundos
 
 interface RateLimitResult {
