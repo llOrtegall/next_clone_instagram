@@ -82,7 +82,7 @@ export default function RegisterPage() {
     <Flex
       align="center"
       justify="center"
-      className="min-h-screen bg-gray-50"
+      className="min-h-screen "
       p="4"
     >
       <Card size="4" style={{ width: "100%", maxWidth: "420px" }}>
@@ -119,11 +119,11 @@ export default function RegisterPage() {
 
           <Separator size="4" className="my-2" />
 
-          <Flex justify="center" align={"center"} gap="2">
+          <Flex justify="center" align={"center"}>
             <Text size="2" color="gray">
               ¿Tienes una cuenta?
             </Text>
-            <Link href="/" className="underline">
+            <Link href="/" className="px-2 text-blue-400 hover:text-gray-300">
               Iniciar sesión
             </Link>
           </Flex>

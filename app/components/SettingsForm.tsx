@@ -33,15 +33,13 @@ export default function SettingsForm({ dataUser }: { dataUser: SettingsFormProps
 
   useEffect(() => {
     if (file) {
-      console.log('Selected file:', file);
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setUploading(true);
-      const data = new FormData();
-      data.set('file', file);
 
       fetch('/api/upload', {
         method: 'POST',
-        body: data,
+        body: file,
+        headers: { 'Content-Type': file.type }
       })
         .then(res => res.json())
         .then(data => {
