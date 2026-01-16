@@ -1,4 +1,4 @@
-import { CameraIcon, HomeIcon, LayoutGridIcon, LucideProps, SearchIcon, User2Icon } from "lucide-react";
+import { CameraIcon, HomeIcon, LucideProps, SearchIcon, User2Icon } from "lucide-react";
 import { ForwardRefExoticComponent, RefAttributes } from "react";
 import { Button, Separator } from "@radix-ui/themes";
 import { auth, signOut } from "@/auth";
@@ -28,11 +28,6 @@ const MenuArray: MenuIconProps[] = [
     path: "/create",
     IconRender: CameraIcon,
     title: "Create"
-  },
-  {
-    path: "/browse",
-    IconRender: LayoutGridIcon,
-    title: "Browse"
   },
   {
     path: "/profile",
