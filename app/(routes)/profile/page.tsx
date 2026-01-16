@@ -1,9 +1,10 @@
-import { CheckIcon, ChevronLeft, CogIcon } from "lucide-react";
+import { ChevronLeft, CogIcon, VerifiedIcon } from "lucide-react";
 import PostGrid from "@/app/components/PostGrid";
 import { prisma } from "@/lib/prisma";
 import Image from "next/image";
 import { auth } from "@/auth";
 import Link from "next/link";
+import { Button } from "@radix-ui/themes";
 
 export default async function ProfilePage() {
   const session = await auth();
@@ -33,12 +34,15 @@ export default async function ProfilePage() {
         </button>
         <article className="font-bold flex items-center gap-2">
           {user?.username || session?.user?.name}
-          <div className="size-4 rounded-full bg-red-800 text-white inline-flex justify-center items-center">
-            <CheckIcon size={16} />
+          <div className="">
+            <VerifiedIcon className="w-5 h-5 text-blue-500 shrink-0" />
           </div>
         </article>
-        <Link href="/settings">
-          <CogIcon />
+        <Link href="/settings" className="flex items-center">
+          <Button variant="soft" size="3">
+            <CogIcon />
+            Config Profile
+          </Button>
         </Link>
       </section>
 

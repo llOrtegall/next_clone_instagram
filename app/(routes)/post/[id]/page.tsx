@@ -2,9 +2,9 @@ import PostActions from "@/app/components/post/PostActions";
 import { Separator, } from "@radix-ui/themes";
 import { VerifiedIcon } from "lucide-react";
 import { getPostById } from "@/lib/actions";
+import { prisma } from "@/lib/prisma";
 import Image from "next/image";
 import { auth } from "@/auth";
-import { prisma } from "@/lib/prisma";
 
 interface PostPageProps {
   params: Promise<{ id: string }>;
@@ -15,6 +15,10 @@ export default async function PostPage({ params }: PostPageProps) {
   const session = await auth();
 
   const post = await getPostById(id);
+
+  if (!post) {
+    return <p className="text-center p-4">Post not found.</p>
+  }
 
   const actualUserId = session?.user?.email || null;
 
@@ -28,18 +32,16 @@ export default async function PostPage({ params }: PostPageProps) {
   })
 
   return (
-    <section className="flex h-full max-w-6xl mx-auto py-4 border border-gray-800 rounded-lg shadow-md gap-4 md:gap-0">
-      <figure className="w-full md:w-8/12 flex items-center justify-center p-2 sm:p-4">
-        <Image
-          src={post?.imageUrl || '/default-post.png'}
-          alt={post?.description || 'Post Image'}
-          width={800}
-          height={600}
-          className="rounded-md object-contain w-full h-auto max-h-96 sm:max-h-full"
-        />
-      </figure>
+    <section className="flex h-full max-w-6xl mx-auto border border-gray-800 rounded-lg shadow-md gap-4 md:gap-0">
+      <Image
+        src={post?.imageUrl || '/default-post.png'}
+        alt={post?.description || 'Post Image'}
+        width={800}
+        height={600}
+        className="rounded-md"
+      />
 
-      <article className="flex flex-col w-full md:w-4/12 px-4 border-l border-gray-800">
+      <article className="flex-1 p-4 flex flex-col">
         <figure className="flex gap-4 items-center">
           <Image
             src={post?.author.image || '/default-profile.png'}
@@ -62,6 +64,9 @@ export default async function PostPage({ params }: PostPageProps) {
               <p className="text-xs sm:text-sm text-gray-500">Location: {post.location}</p>
             </figure>
           )}
+          <p className="text-xs text-gray-500">
+            {post.createdAt.toDateString()} - Posted
+          </p>
         </article>
 
         <Separator size="4" className="my-4" />
