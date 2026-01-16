@@ -1,5 +1,5 @@
+import { getPostComments, getPostLikeStatus, toggleLike } from "@/lib/actions";
 import { useEffect, useState } from "react";
-import { getPostComments, getPostLikeStatus } from "@/lib/actions";
 import { Comment } from "./types";
 
 export function usePostComments(postId: string) {
@@ -37,24 +37,32 @@ export function usePostComments(postId: string) {
   return { comments, setComments, loading, error };
 }
 
-export function useLikeStatus(postId: string, userId: string) {
-  const [liked, setLiked] = useState(false);
-  const [loading, setLoading] = useState(true);
+export function useLikes(postId: string, initialLikesCount: number, currentUserId?: string) {
+    const [liked, setLiked] = useState(false);
+    const [likesCount, setLikesCount] = useState(initialLikesCount);
 
   useEffect(() => {
-    const checkLikeStatus = async () => {
-      try {
-        const isLiked = await getPostLikeStatus(postId, userId);
-        setLiked(isLiked);
-      } catch (err) {
-        console.error("Failed to check like status:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
+    if (!currentUserId) return
 
-    checkLikeStatus();
-  }, [postId, userId]);
+    const likeStatus = async () => {
+      const likeStatus = await getPostLikeStatus(postId, currentUserId);
+      setLiked(likeStatus);
+    }
 
-  return { liked, setLiked, loading };
+    likeStatus();
+  }, [postId, currentUserId]);
+
+  const handleToggleLike = async () => {
+    if (!currentUserId) return;
+
+    try {
+      const { count, liked } = await toggleLike(postId, currentUserId);
+      setLikesCount(count);
+      setLiked(liked);
+    } catch (error) {
+      console.error("Failed to toggle like:", error);
+    }
+  };
+
+  return { liked, likesCount, handleToggleLike };
 }
