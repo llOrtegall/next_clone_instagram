@@ -1,4 +1,4 @@
-import PostTest from "@/app/components/post/PostTest";
+import PostActions from "@/app/components/post/PostActions";
 import { Separator, } from "@radix-ui/themes";
 import { VerifiedIcon } from "lucide-react";
 import { getPostById } from "@/lib/actions";
@@ -68,7 +68,7 @@ export default async function PostPage({ params }: PostPageProps) {
 
         {/* Section interaction */}
 
-        <PostTest post={post!} currentUserId={currentUserId.id} />
+        <PostActions post={post!} currentUserId={currentUserId.id} />
 
       </article>
     </section>
