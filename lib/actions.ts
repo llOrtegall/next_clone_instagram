@@ -179,6 +179,17 @@ export async function getPostLikeStatus(postId: string, userId: string) {
 }
 
 /**
+ * Get likes count for a post
+ */
+export async function getPostLikesCount(postId: string) {
+  const post = await prisma.post.findUnique({
+    where: { id: postId },
+    select: { likesCount: true }
+  });
+  return post?.likesCount || 0;
+}
+
+/**
  * Toggle like on a post (add if doesn't exist, remove if exists)
  * Updates the likesCount counter automatically
  */
@@ -222,17 +233,6 @@ export async function toggleLike(postId: string, userId: string) {
     ]);
     return { liked: true, count: await getPostLikesCount(postId) };
   }
-}
-
-/**
- * Get likes count for a post
- */
-export async function getPostLikesCount(postId: string) {
-  const post = await prisma.post.findUnique({
-    where: { id: postId },
-    select: { likesCount: true }
-  });
-  return post?.likesCount || 0;
 }
 
 /**
