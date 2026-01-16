@@ -1,26 +1,25 @@
 'use client';
 
-import { Heart, MessageCircle, Bookmark, Smile } from "lucide-react";
+import { Heart, MessageCircle, Bookmark } from "lucide-react";
 import { Button, Separator, TextField } from "@radix-ui/themes";
-import { addComment, toggleLike } from "@/lib/actions";
-import { FormEvent, useCallback } from "react";
+import { EmojiPickerButton } from "./EmojiPickerButton";
+import { FormEvent, useCallback, useRef } from "react";
+import { useLikes, usePostComments } from "./hooks";
+import { addComment } from "@/lib/actions";
 import { CommentItem } from "./CommentItem";
-import { usePostComments, useLikeStatus } from "./hooks";
 import { PostActionProps } from "./types";
 
 export default function PostActions({ post, currentUserId }: PostActionProps) {
   const { comments, setComments, loading: commentsLoading } = usePostComments(post.id);
-  const { liked, setLiked } = useLikeStatus(post.id, currentUserId!);
+  const { liked, likesCount, handleToggleLike } = useLikes(post.id, post.likesCount, currentUserId);
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  const handleClickLike = useCallback(async () => {
-    if (!currentUserId) return;
-    try {
-      const { liked: newLiked } = await toggleLike(post.id, currentUserId);
-      setLiked(newLiked);
-    } catch (error) {
-      console.error("Failed to toggle like:", error);
+  const handleEmojiSelect = (emoji: string) => {
+    if (inputRef.current) {
+      inputRef.current.value += emoji;
+      inputRef.current.focus();
     }
-  }, [post.id, currentUserId, setLiked]);
+  };
 
   const handleAddComment = useCallback(async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -47,8 +46,6 @@ export default function PostActions({ post, currentUserId }: PostActionProps) {
     }
   }, [post.id, currentUserId, comments, setComments]);
 
-  const likeCount = liked ? post.likesCount + 1 : post.likesCount;
-
   return (
     <>
       {/* Comments Section */}
@@ -67,9 +64,10 @@ export default function PostActions({ post, currentUserId }: PostActionProps) {
           name="content"
           placeholder="Add a comment..."
           className="flex-1"
+          ref={inputRef}
         />
         <TextField.Slot>
-          <Smile className="w-6 h-6 text-gray-400 hover:text-yellow-500 transition cursor-pointer" />
+          <EmojiPickerButton onEmojiSelect={handleEmojiSelect} />
         </TextField.Slot>
         <Button type="submit" size="3">
           Post
@@ -83,9 +81,9 @@ export default function PostActions({ post, currentUserId }: PostActionProps) {
         <div className="flex items-center justify-between mb-4">
           <nav className="flex gap-4">
             <button
-              onClick={handleClickLike}
               className="cursor-pointer hover:text-red-500 transition text-gray-400"
               aria-label={liked ? "Unlike post" : "Like post"}
+              onClick={handleToggleLike}
             >
               {liked ? (
                 <Heart className="w-6 h-6 fill-red-500 text-red-500" />
@@ -111,10 +109,7 @@ export default function PostActions({ post, currentUserId }: PostActionProps) {
 
         <article className="flex justify-between items-center">
           <p className="text-xs sm:text-sm font-semibold text-white">
-            {likeCount} Likes
-          </p>
-          <p className="text-xs text-gray-500">
-            {post.createdAt.toDateString()} - Posted
+            {likesCount} Likes
           </p>
         </article>
       </section>
