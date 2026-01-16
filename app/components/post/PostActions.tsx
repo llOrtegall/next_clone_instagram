@@ -25,7 +25,8 @@ export default function PostActions({ post, currentUserId }: PostActionProps) {
   const handleAddComment = useCallback(async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const formData = new FormData(e.currentTarget);
+    const form = e.currentTarget;
+    const formData = new FormData(form);
     const content = formData.get("content") as string;
 
     if (!content?.trim() || !currentUserId) return;
@@ -39,9 +40,10 @@ export default function PostActions({ post, currentUserId }: PostActionProps) {
         username: newComment.user.username,
         userImage: newComment.user.image,
       }]);
-      e.currentTarget.reset();
     } catch (error) {
       console.error("Failed to add comment:", error);
+    } finally {
+      form.reset();
     }
   }, [post.id, currentUserId, comments, setComments]);
 

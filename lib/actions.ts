@@ -332,7 +332,7 @@ export async function getPostComments(postId: string) {
         }
       }
     },
-    orderBy: { createdAt: 'desc' }
+    orderBy: { createdAt: 'asc' }
   });
 }
 
