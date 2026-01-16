@@ -20,6 +20,11 @@ model User {
   bio           String?
   accounts      Account[]
   sessions      Session[]
+  posts         Post[]
+  likes         Like[]
+  comments      Comment[]
+  followers     Follow[]        @relation("UserFollowers")
+  following     Follow[]        @relation("UserFollowing")
  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -76,14 +81,63 @@ model UploadRateLimit {
 }
 
 model Post {
-  id          String   @id @default(cuid())
-  authorEmail String
-  imageUrl    String
-  description String?
-  location    String?
-  likes       Int      @default(0)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id            String    @id @default(cuid())
+  authorId      String
+  author        User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  imageUrl      String
+  description   String?
+  location      String?
+  likesCount    Int       @default(0)
+  commentsCount Int       @default(0)
+  likes         Like[]
+  comments      Comment[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 
-  @@index([authorEmail])
+  @@index([authorId])
+  @@index([createdAt])
+}
+
+// Like - Relación many-to-many entre User y Post
+model Like {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  postId    String
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, postId])
+  @@index([postId])
+  @@index([userId])
+}
+
+// Comment
+model Comment {
+  id        String   @id @default(cuid())
+  content   String
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  postId    String
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([postId])
+  @@index([userId])
+  @@index([createdAt])
+}
+
+// Follow - Relación de seguimiento entre usuarios
+model Follow {
+  id          String   @id @default(cuid())
+  followerId  String
+  follower    User     @relation("UserFollowing", fields: [followerId], references: [id], onDelete: Cascade)
+  followingId String
+  following   User     @relation("UserFollowers", fields: [followingId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+
+  @@unique([followerId, followingId])
+  @@index([followerId])
+  @@index([followingId])
 }
