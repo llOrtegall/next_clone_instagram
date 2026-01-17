@@ -68,7 +68,7 @@ export default function CreatePost({ name, email, image, username }: CreatePostP
   return (
     <div className="fixed inset-0 bg-black/10 backdrop-blur-sm flex items-center justify-center z-50 p-4">
 
-      <section className="bg-black/10 backdrop-blur-md rounded-lg shadow-lg p-8 w-3/6 h-5/6 max-h-[90vh] overflow-y-auto flex ">
+      <section className="bg-black/10 backdrop-blur-md rounded-lg shadow-lg p-8 w-4/6 h-5/6 max-h-[90vh] overflow-y-auto flex ">
 
         {/* Image Upload Section */}
         <article className="w-10/12 grid place-content-center">
@@ -83,7 +83,7 @@ export default function CreatePost({ name, email, image, username }: CreatePostP
               />
               <button
                 onClick={handleRemoveImage}
-                className="absolute top-6 right-6 bg-black/60 hover:bg-black/80 p-2 rounded-full transition-all"
+                className="absolute top-6 right-6 bg-black/60 hover:bg-red-600/80 p-2 rounded-full transition-all cursor-pointer"
               >
                 <XIcon className="w-5 h-5" />
               </button>
