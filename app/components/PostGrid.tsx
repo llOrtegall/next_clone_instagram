@@ -1,5 +1,5 @@
 import { getAllPostByEmail } from "@/lib/actions";
-import { HeartIcon } from "lucide-react";
+import { Heart, MessageCircle } from "lucide-react";
 import Image from "next/image"
 import Link from "next/link";
 
@@ -17,31 +17,41 @@ export default async function PostGrid({ email }: { email: string }) {
 
   return (
     <section className="w-full p-4 sm:p-6">
-      <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">
+      <div className="grid grid-cols-4 gap-1 sm:gap-2 md:gap-4">
         {
           posts.map((p) => (
-            <div key={p.id} className="break-inside-avoid group relative overflow-hidden rounded-lg">
-              <Link href={`/post/${p.id}`} className="block relative bg-gray-900 rounded-lg overflow-hidden">
-                <Image
-                  src={p.imageUrl}
-                  alt="Post Image"
-                  width={300}
-                  height={300}
-                  className="w-full h-auto object-cover rounded-lg hover:scale-105 transition-transform duration-300"
-                  priority={false}
-                  loading="lazy"
-                />
-                {/* Overlay en hover */}
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all duration-300 rounded-lg flex items-center justify-center">
-                  <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <p className="text-white text-lg font-semibold">
-                      {p.likes}
-                      <HeartIcon className="w-6 h-6 inline-block ml-2 text-white" />   
-                    </p>
+            <Link 
+              key={p.id} 
+              href={`/post/${p.id}`} 
+              className="group relative aspect-square bg-gray-900 overflow-hidden cursor-pointer"
+            >
+              <Image
+                src={p.imageUrl}
+                alt="Post Image"
+                fill
+                className="object-cover rounded-sm transition-transform duration-300 group-hover:scale-110"
+                sizes="(max-width: 640px) 33vw, (max-width: 1024px) 25vw, 20vw"
+                priority={false}
+                loading="lazy"
+              />
+              {/* Overlay estilo Instagram en hover */}
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors duration-200 flex items-center justify-center">
+                <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center gap-6">
+                  <div className="flex items-center gap-2">
+                    <Heart className="w-6 h-6 sm:w-7 sm:h-7 text-white fill-white" />
+                    <span className="text-white font-bold text-base sm:text-lg">
+                      {p.likesCount}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <MessageCircle className="w-6 h-6 sm:w-7 sm:h-7 text-white fill-white" />
+                    <span className="text-white font-bold text-base sm:text-lg">
+                      {p.commentsCount}
+                    </span>
                   </div>
                 </div>
-              </Link>
-            </div>
+              </div>
+            </Link>
           ))
         }
       </div>

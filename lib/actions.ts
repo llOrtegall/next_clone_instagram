@@ -7,21 +7,96 @@ import { prisma } from "./prisma";
  * This function updates an existing profile or creates a new one based on the provided user email.
  * @param data FormData containing the profile information
  * @param userEmail The email of the user whose profile is to be updated or created
- * @return Promise<void>
+ * @return Promise with success status and optional error message
  */
 export async function updateProfile(data: FormData, userEmail: string) {
-  const newUserInfo = {
-    username: data.get("username") as string,
-    name: data.get("name") as string,
-    subtitle: data.get("subtitle") as string,
-    bio: data.get("bio") as string,
-    image: data.get("image") as string | null,
-  }
+  try {
+    // Validar que el email existe
+    if (!userEmail) {
+      return { success: false, error: 'Email is required' };
+    }
 
-  await prisma.user.update({
-    where: { email: userEmail },
-    data: newUserInfo
-  })
+    // Obtener el usuario actual
+    const currentUser = await prisma.user.findUnique({
+      where: { email: userEmail },
+      select: { id: true, username: true }
+    });
+
+    if (!currentUser) {
+      return { success: false, error: 'User not found' };
+    }
+
+    // Extraer y validar datos
+    const username = data.get("username")?.toString().trim().toLowerCase();
+    const name = data.get("name")?.toString().trim();
+    const subtitle = data.get("subtitle")?.toString().trim() || null;
+    const bio = data.get("bio")?.toString().trim() || null;
+    const image = data.get("image")?.toString().trim() || null;
+
+    // Validaciones básicas
+    if (!username || username.length < 3) {
+      return { success: false, error: 'Username must be at least 3 characters long' };
+    }
+
+    if (username.length > 30) {
+      return { success: false, error: 'Username must be less than 30 characters' };
+    }
+
+    // Validar que el username solo contenga caracteres válidos
+    if (!/^[a-z0-9._]+$/.test(username)) {
+      return { success: false, error: 'Username can only contain lowercase letters, numbers, dots and underscores' };
+    }
+
+    if (!name || name.length < 1) {
+      return { success: false, error: 'Name is required' };
+    }
+
+    if (name.length > 50) {
+      return { success: false, error: 'Name must be less than 50 characters' };
+    }
+
+    // Validar que el username no esté en uso (si cambió)
+    if (username !== currentUser.username) {
+      const existingUser = await prisma.user.findUnique({
+        where: { username },
+        select: { id: true }
+      });
+
+      if (existingUser && existingUser.id !== currentUser.id) {
+        return { success: false, error: 'Username is already taken' };
+      }
+    }
+
+    // Preparar datos para actualizar
+    const newUserInfo = {
+      username,
+      name,
+      subtitle,
+      bio,
+      image,
+    };
+
+    // Actualizar usuario
+    await prisma.user.update({
+      where: { email: userEmail },
+      data: newUserInfo
+    });
+
+    return { success: true, message: 'Profile updated successfully' };
+
+  } catch (error) {
+    console.error('Error updating profile:', error);
+    
+    // Manejar errores específicos de Prisma
+    if (error instanceof Error) {
+      if (error.message.includes('Unique constraint')) {
+        return { success: false, error: 'Username is already taken' };
+      }
+      return { success: false, error: error.message };
+    }
+    
+    return { success: false, error: 'An unexpected error occurred while updating profile' };
+  }
 }
 
 /**
